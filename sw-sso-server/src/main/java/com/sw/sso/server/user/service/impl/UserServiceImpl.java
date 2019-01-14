@@ -1,13 +1,13 @@
 package com.sw.sso.server.user.service.impl;
 
-import com.sw.sso.core.ssouser.SsoUserInfo;
 import com.sw.sso.server.user.model.UserModel;
 import com.sw.sso.server.user.service.UserService;
 import org.springframework.stereotype.Service;
-import vo.ReturnMsgUtil;
+import com.sw.sso.server.core.vo.ReturnMsgUtil;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author sw
@@ -45,11 +45,18 @@ public class UserServiceImpl implements UserService {
         if(null==userPassWord || userPassWord.trim().length()==0){
             return new ReturnMsgUtil<>(ReturnMsgUtil.FAIL_CODE,"please input userpassword");
         }
-        UserModel userModel=mockUserList.stream().filter(e->{
-           return e.getUserName().equals(userName) && e.getUserPassWord().equals(userPassWord);
-        }).findFirst().get();
+        Optional<UserModel> userModel=mockUserList.stream().filter(e->e.getUserName().equals(userName) && e.getUserPassWord().equals(userPassWord)).findFirst();
 
-        return new ReturnMsgUtil<>(userModel);
+        return new ReturnMsgUtil<>(userModel.get());
     }
 
+    public static void main(String[] args) {
+        List<UserModel> userModels=new ArrayList<>();
+        UserModel u1=new UserModel();
+        u1.setUserName("112");
+        u1.setUserPassWord("12");
+        userModels.add(u1);
+        Optional<UserModel> userModel=userModels.stream().filter(e-> e.getUserPassWord().equals("12")).findFirst();
+        System.out.println(userModel.get().getUserName());
+    }
 }

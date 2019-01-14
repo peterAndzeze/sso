@@ -1,7 +1,7 @@
 package com.sw.sso.server.user.service;
 
 import com.sw.sso.server.user.model.UserModel;
-import vo.ReturnMsgUtil;
+import com.sw.sso.server.core.vo.ReturnMsgUtil;
 
 /**
  * 用户service

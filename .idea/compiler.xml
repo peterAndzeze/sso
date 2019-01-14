@@ -6,14 +6,17 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="sso-server-demo" />
         <module name="sw-sso-core" />
         <module name="sw-sso-server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="sso" target="1.8" />
+      <module name="sso-server-demo" target="1.8" />
       <module name="sw-sso-core" target="1.8" />
       <module name="sw-sso-server" target="1.8" />
+      <module name="swssodemo" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>
