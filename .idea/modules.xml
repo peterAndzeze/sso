@@ -3,8 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/sso.iml" filepath="$PROJECT_DIR$/.idea/sso.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sw-sso-demo/sso-server-demo.iml" filepath="$PROJECT_DIR$/sw-sso-demo/sso-server-demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/sw-sso-core/sw-sso-core.iml" filepath="$PROJECT_DIR$/sw-sso-core/sw-sso-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/sw-sso-demo/sw-sso-demo.iml" filepath="$PROJECT_DIR$/sw-sso-demo/sw-sso-demo.iml" />
       <module fileurl="file://$PROJECT_DIR$/sw-sso-server/sw-sso-server.iml" filepath="$PROJECT_DIR$/sw-sso-server/sw-sso-server.iml" />
     </modules>
   </component>

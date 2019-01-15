@@ -55,6 +55,9 @@ public class WebController {
         if(null!=ssoUserInfo){
             String redirectUrl=request.getParameter(SsoConf.REDIRECT_URL);
             if(null!=redirectUrl && redirectUrl.trim().length()>0){
+                if(redirectUrl.endsWith("/")){
+                    redirectUrl=redirectUrl.substring(0,redirectUrl.length()-1);
+                }
                 String sessionId=SsoLoginHelper.getSessionIdByCookie(request);
                 String redirectUrlFinal=redirectUrl+"?"+SsoConf.SSO_SESSIONID+"="+sessionId;
                 return "redirect:"+redirectUrlFinal;
@@ -87,8 +90,12 @@ public class WebController {
         SsoLoginHelper.login(response,sessionId,ssoUserInfo,ifRem);
         String redirectUrl=request.getParameter(SsoConf.REDIRECT_URL);
         if(null!=redirectUrl && redirectUrl.trim().length()>0){
-            String redirectFinalUrl=redirectUrl+"?"+SsoConf.SSO_SESSIONID+"="+sessionId;
-            return  "redirect:"+redirectFinalUrl;
+            if(redirectUrl.endsWith("/")){
+                redirectUrl=redirectUrl.substring(0,redirectUrl.length()-1);
+            }
+            redirectAttributes.addAttribute(SsoConf.SSO_SESSIONID,sessionId);
+            System.out.println("************"+redirectUrl);
+            return  "redirect:"+redirectUrl;
         }else{
             return "redirect:/";
         }

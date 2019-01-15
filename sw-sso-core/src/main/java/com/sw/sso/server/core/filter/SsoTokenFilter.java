@@ -46,6 +46,7 @@ public class SsoTokenFilter extends HttpServlet implements Filter {
         HttpServletRequest request=(HttpServletRequest)servletRequest;
         HttpServletResponse response=(HttpServletResponse)servletResponse;
         String servletPath=request.getServletPath();
+        System.out.println("/servletPath*************"+servletPath);
         if(excludedPaths!=null && excludedPaths.trim().length()>0){
             for(String excludePath:excludedPaths.split(",")){
                 String uriPattern=excludePath.trim();
@@ -54,23 +55,31 @@ public class SsoTokenFilter extends HttpServlet implements Filter {
                 }
             }
         }
-        if(null!=loginoutPath && loginoutPath.trim().length()>0 && loginoutPath.equals(servletPath)){
-            SsoTokenLoginHelper.logout(request);
-            response.setStatus(HttpServletResponse.SC_OK);
-            response.setContentType("application/json;charset=utf-8");
-            response.getWriter().print("{\"code\":"+ ReturnMsgUtil.SUCCESS_CODE+", \"msg\":\"\"}");
+        if(null!=loginoutPath && loginoutPath.trim().length()>0 && servletPath.endsWith(loginoutPath)){
+            SsoTokenLoginHelper.removeSessionIdByCookie(request,response);
+            String loginoutUrl=ssoServer.concat(SsoConf.SSO_LOGINOUT);
+            response.sendRedirect(loginoutUrl);
             return;
         }
 
-        SsoUserInfo ssoUserInfo=SsoTokenLoginHelper.loginCheck(request);
-        if(null!=ssoUserInfo){
-            response.setStatus(HttpServletResponse.SC_OK);
+        SsoUserInfo ssoUserInfo=SsoTokenLoginHelper.loginCheck(request,response);
+            if(null==ssoUserInfo){
+           /* response.setStatus(HttpServletResponse.SC_OK);
             response.setContentType("application/json;charset=UTF-8");
-            response.getWriter().println("{\"code\":"+SsoConf.SSO_LOGIN_FAIL_RESULT.getCode()+", \"msg\":\""+ SsoConf.SSO_LOGIN_FAIL_RESULT.getMsg() +"\"}");
+            response.getWriter().println("{\"code\":"+SsoConf.SSO_LOGIN_FAIL_RESULT.getCode()+", \"msg\":\""+ SsoConf.SSO_LOGIN_FAIL_RESULT.getMsg() +"\"}");*/
+           String link=request.getRequestURL().toString();
+            String loginPageUrl=ssoServer.concat(SsoConf.SSO_LOGIN)+"?"+SsoConf.REDIRECT_URL+"="+link;
+                System.out.println("loginPageUrl*********"+loginPageUrl);
+            response.sendRedirect(loginPageUrl);
             return;
         }
-        request.setAttribute(SsoConf.SSO_USER,ssoUserInfo);
-        filterChain.doFilter(request,response);
+        servletRequest.setAttribute(SsoConf.SSO_USER,ssoUserInfo);
+        filterChain.doFilter(servletRequest,servletResponse);
         return;
+    }
+
+    @Override
+    public void destroy() {
+
     }
 }

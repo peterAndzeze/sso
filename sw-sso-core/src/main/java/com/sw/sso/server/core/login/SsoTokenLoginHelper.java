@@ -4,8 +4,10 @@ import com.sw.sso.server.core.config.SsoConf;
 import com.sw.sso.server.core.ssostore.SsoLoginStore;
 import com.sw.sso.server.core.ssostore.SsoSessionIdHelper;
 import com.sw.sso.server.core.ssouser.SsoUserInfo;
+import com.sw.sso.server.core.util.CookieUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * @author sw
@@ -70,32 +72,57 @@ public class SsoTokenLoginHelper {
             return null;
         }
 
-        SsoUserInfo xxlUser = SsoLoginStore.get(storeKey);
-        if (xxlUser != null) {
+        SsoUserInfo ssoUserInfo = SsoLoginStore.get(storeKey);
+        if (ssoUserInfo != null) {
             String version = SsoSessionIdHelper.parseVersion(sessionId);
-            if (xxlUser.getVersion().equals(version)) {
+            if (ssoUserInfo.getVersion().equals(version)) {
 
                 // After the expiration time has passed half, Auto refresh
-                if ((System.currentTimeMillis() - xxlUser.getExpireFreshTime()) > xxlUser.getExpireMinite()/2) {
-                    xxlUser.setExpireFreshTime(System.currentTimeMillis());
-                    SsoLoginStore.put(storeKey, xxlUser);
+                if ((System.currentTimeMillis() - ssoUserInfo.getExpireFreshTime()) > ssoUserInfo.getExpireMinite()/2) {
+                    ssoUserInfo.setExpireFreshTime(System.currentTimeMillis());
+                    SsoLoginStore.put(storeKey, ssoUserInfo);
                 }
 
-                return xxlUser;
+                return ssoUserInfo;
             }
         }
         return null;
     }
 
 
+    public static SsoUserInfo loginCheck(HttpServletRequest request, HttpServletResponse response){
+
+        String cookieSessionId = CookieUtil.getValue(request, SsoConf.SSO_SESSIONID);
+
+        // cookie user
+        SsoUserInfo ssoUserInfo = SsoTokenLoginHelper.loginCheck(cookieSessionId);
+        if (ssoUserInfo != null) {
+            return ssoUserInfo;
+        }
+
+        // redirect user
+
+        // remove old cookie
+        SsoTokenLoginHelper.removeSessionIdByCookie(request, response);
+
+        // set new cookie
+        String paramSessionId = request.getParameter(SsoConf.SSO_SESSIONID);
+        ssoUserInfo = SsoTokenLoginHelper.loginCheck(paramSessionId);
+        if (ssoUserInfo != null) {
+            CookieUtil.set(response, SsoConf.SSO_SESSIONID, paramSessionId, false);    // expire when browser close （client cookie）
+            return ssoUserInfo;
+        }
+
+        return null;
+    }
+
     /**
-     * login check
+     * client logout, cookie only
      *
      * @param request
-     * @return
+     * @param response
      */
-    public static SsoUserInfo loginCheck(HttpServletRequest request){
-        String headerSessionId = request.getHeader(SsoConf.SSO_SESSIONID);
-        return loginCheck(headerSessionId);
+    public static void removeSessionIdByCookie(HttpServletRequest request, HttpServletResponse response) {
+        CookieUtil.remove(request, response, SsoConf.SSO_SESSIONID);
     }
 }

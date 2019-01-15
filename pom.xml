@@ -13,6 +13,7 @@
     <modules>
         <module>sw-sso-server</module>
         <module>sw-sso-core</module>
+        <module>sw-sso-demo</module>
     </modules>
 
     <properties>
