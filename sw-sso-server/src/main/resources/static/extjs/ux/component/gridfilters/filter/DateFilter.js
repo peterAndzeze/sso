@@ -4,13 +4,13 @@
  * licensing@sencha.com
  * http://www.sencha.com/license
  */
-/** 
+/**
  * @class Ext.ux.grid.filter.DateFilter
  * @extends Ext.ux.grid.filter.Filter
  * Filter by a configurable Ext.menu.DateMenu
  * <p><b><u>Example Usage:</u></b></p>
- * <pre><code>    
-var filters = new Ext.ux.grid.GridFilters({
+ * <pre><code>
+ var filters = new Ext.ux.grid.GridFilters({
     ...
     filters: [{
         // required configs
@@ -36,27 +36,27 @@ Ext.ux.grid.filter.DateFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
      * @cfg {String} afterText
      * Defaults to 'After'.
      */
-    afterText : 'After',
+    afterText: 'After',
     /**
      * @cfg {String} beforeText
      * Defaults to 'Before'.
      */
-    beforeText : 'Before',
+    beforeText: 'Before',
     /**
      * @cfg {Object} compareMap
      * Map for assigning the comparison values used in serialization.
      */
-    compareMap : {
+    compareMap: {
         before: 'lt',
-        after:  'gt',
-        on:     'eq'
+        after: 'gt',
+        on: 'eq'
     },
     /**
      * @cfg {String} dateFormat
      * The date format to return when using getValue.
      * Defaults to 'm/d/Y'.
      */
-    dateFormat : 'm/d/Y',
+    dateFormat: 'm/d/Y',
 
     /**
      * @cfg {Date} maxDate
@@ -75,13 +75,13 @@ Ext.ux.grid.filter.DateFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
      * menuItems : ['before', 'after', '-', 'on'],
      * </pre>
      */
-    menuItems : ['before', 'after', '-', 'on'],
+    menuItems: ['before', 'after', '-', 'on'],
 
     /**
      * @cfg {Object} menuItemCfgs
      * Default configuration options for each menu item
      */
-    menuItemCfgs : {
+    menuItemCfgs: {
         selectOnFocus: true,
         width: 125
     },
@@ -90,25 +90,25 @@ Ext.ux.grid.filter.DateFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
      * @cfg {String} onText
      * Defaults to 'On'.
      */
-    onText : 'On',
-    
+    onText: 'On',
+
     /**
      * @cfg {Object} pickerOpts
      * Configuration options for the date picker associated with each field.
      */
-    pickerOpts : {},
+    pickerOpts: {},
 
-    /**  
+    /**
      * @private
      * Template method that is to initialize the filter and install required menu items.
      */
-    init : function (config) {
+    init: function (config) {
         var menuCfg, i, len, item, cfg, Cls;
 
         menuCfg = Ext.apply(this.pickerOpts, {
-            minDate: this.minDate, 
-            maxDate: this.maxDate, 
-            format:  this.dateFormat,
+            minDate: this.minDate,
+            maxDate: this.maxDate,
+            format: this.dateFormat,
             listeners: {
                 scope: this,
                 select: this.onMenuSelect
@@ -140,17 +140,17 @@ Ext.ux.grid.filter.DateFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
         }
     },
 
-    onCheckChange : function () {
+    onCheckChange: function () {
         this.setActive(this.isActivatable());
         this.fireEvent('update', this);
     },
 
-    /**  
+    /**
      * @private
      * Handler method called when there is a keyup event on an input
      * item of this menu.
      */
-    onInputKeyUp : function (field, e) {
+    onInputKeyUp: function (field, e) {
         var k = e.getKey();
         if (k == e.RETURN && field.isValid()) {
             e.stopEvent();
@@ -166,12 +166,12 @@ Ext.ux.grid.filter.DateFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
      * @param {Object} value
      * @param {Object} picker
      */
-    onMenuSelect : function (menuItem, value, picker) {
+    onMenuSelect: function (menuItem, value, picker) {
         var fields = this.fields,
             field = this.fields[menuItem.itemId];
-        
+
         field.setChecked(true);
-        
+
         if (field == fields.on) {
             fields.before.setChecked(false, true);
             fields.after.setChecked(false, true);
@@ -191,7 +191,7 @@ Ext.ux.grid.filter.DateFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
      * Template method that is to get and return the value of the filter.
      * @return {String} The value of this filter
      */
-    getValue : function () {
+    getValue: function () {
         var key, result = {};
         for (key in this.fields) {
             if (this.fields[key].checked) {
@@ -208,11 +208,11 @@ Ext.ux.grid.filter.DateFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
      * @param {Boolean} preserve true to preserve the checked status
      * of the other fields.  Defaults to false, unchecking the
      * other fields
-     */	
-    setValue : function (value, preserve) {
+     */
+    setValue: function (value, preserve) {
         var key;
         for (key in this.fields) {
-            if(value[key]){
+            if (value[key]) {
                 this.fields[key].menu.picker.setValue(value[key]);
                 this.fields[key].setChecked(true);
             } else if (!preserve) {
@@ -228,7 +228,7 @@ Ext.ux.grid.filter.DateFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
      * has enough configuration information to be activated.
      * @return {Boolean}
      */
-    isActivatable : function () {
+    isActivatable: function () {
         var key;
         for (key in this.fields) {
             if (this.fields[key].checked) {
@@ -245,10 +245,10 @@ Ext.ux.grid.filter.DateFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
      * @return {Object/Array} An object or collection of objects containing
      * key value pairs representing the current configuration of the filter.
      */
-    getSerialArgs : function () {
+    getSerialArgs: function () {
         var args = [];
         for (var key in this.fields) {
-            if(this.fields[key].checked){
+            if (this.fields[key].checked) {
                 args.push({
                     type: 'date',
                     comparison: this.compareMap[key],
@@ -264,16 +264,16 @@ Ext.ux.grid.filter.DateFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
      * @param {String} item The field identifier ('before', 'after', 'on')
      * @return {Date} Gets the current selected value of the date field
      */
-    getFieldValue : function(item){
+    getFieldValue: function (item) {
         return this.fields[item].menu.picker.getValue();
     },
-    
+
     /**
      * Gets the menu picker associated with the passed field
      * @param {String} item The field identifier ('before', 'after', 'on')
      * @return {Object} The menu picker
      */
-    getPicker : function(item){
+    getPicker: function (item) {
         return this.fields[item].menu.picker;
     },
 
@@ -284,16 +284,16 @@ Ext.ux.grid.filter.DateFilter = Ext.extend(Ext.ux.grid.filter.Filter, {
      * @return {Boolean} true if the record is valid within the bounds
      * of the filter, false otherwise.
      */
-    validateRecord : function (record) {
+    validateRecord: function (record) {
         var key,
             pickerValue,
             val = record.get(this.dataIndex);
-            
-        if(!Ext.isDate(val)){
+
+        if (!Ext.isDate(val)) {
             return false;
         }
         val = val.clearTime(true).getTime();
-        
+
         for (key in this.fields) {
             if (this.fields[key].checked) {
                 pickerValue = this.getFieldValue(key).clearTime(true).getTime();

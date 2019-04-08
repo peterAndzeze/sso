@@ -1,11 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>sso-server</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <link href="/sw-sso-server/static/extjs/resources/css/ext-all.css" rel="stylesheet"
-          type="text/css" />
-    <link href="/sw-sso-server/static/css/default.resource.css" rel="stylesheet" type="text/css" />
-    <link href="/sw-sso-server/static/css/ext-font.css" rel="stylesheet" type="text/css" />
+          type="text/css"/>
+    <link href="/sw-sso-server/static/css/default.resource.css" rel="stylesheet" type="text/css"/>
+    <link href="/sw-sso-server/static/css/ext-font.css" rel="stylesheet" type="text/css"/>
     <script src="/sw-sso-server/static/extjs/adapter/ext/ext-base.js" type="text/javascript"></script>
     <script src="/sw-sso-server/static/extjs/adapter/ext/ext-base.js" type="text/javascript"></script>
     <script src="/sw-sso-server/static/extjs/ext-all.js" type="text/javascript"></script>
@@ -13,20 +13,26 @@
     <script src="/sw-sso-server/static/js/customer/msg.js" type="text/javascript"></script>
 
     <style>
-        body{FONT-FAMILY: 微软雅黑;}
+        body {
+            FONT-FAMILY: 微软雅黑;
+        }
     </style>
 </head>
-<body background="/sw-sso-server/static/images/capec.png" style="background-repeat: no-repeat;" leftMargin=0 topMargin=0 marginheight="0" marginwidth="0">
+<body background="/sw-sso-server/static/images/capec.png" style="background-repeat: no-repeat;" leftMargin=0 topMargin=0
+      marginheight="0" marginwidth="0">
 <div style="PADDING-TOP: 80px" align=center valign="middle">
     <form method="post" name=loginform action="doLogin">
         <div align=center>
             <table
-                    style="BORDER-BOTTOM: #ecfafb 6px solid; BORDER-LEFT: #ecfafb 6px solid; BORDER-TOP: #ecfafb 6px solid; BORDER-RIGHT: #ecfafb 6px solid" border=0 cellSpacing=0 cellPadding=0 width=700  height=380>
+                    style="BORDER-BOTTOM: #ecfafb 6px solid; BORDER-LEFT: #ecfafb 6px solid; BORDER-TOP: #ecfafb 6px solid; BORDER-RIGHT: #ecfafb 6px solid"
+                    border=0 cellSpacing=0 cellPadding=0 width=700 height=380>
                 <tbody>
                 <tr>
                     <td
                             style="FILTER: alpha(opacity=80); LINE-HEIGHT: 200%; MARGIN-TOP: 0px; FONT-FAMILY: 微软雅黑; MARGIN-BOTTOM: 0px; COLOR: #ffffff; FONT-SIZE: 24pt; FONT-WEIGHT: bold"
-                            bgColor=#005a8f height=120 align=middle>sso-server</td></tr>
+                            bgColor=#005a8f height=120 align=middle>sso-server
+                    </td>
+                </tr>
                 <tr>
                     <td style="FILTER: Alpha(opacity=50); BACKGROUND: #ffffff" height=55
                         align=middle>
@@ -39,25 +45,37 @@
                                         tabIndex=1 name="userName"> 密码：<input
                                         style="WIDTH: 100px; HEIGHT: 25px; FONT-SIZE: 12pt" tabIndex=2
                                         type=password name="userPassWord" autocomplete="off">
-                                        <input type="text" name="redirect_url" th:value="${redirect_url}" style="display: none">
-                                        是否记住：<input type="radio" value="on" name="ifRemember"  >
+                                    <input type="text" name="redirect_url" th:value="${redirect_url}"
+                                           style="display: none">
+                                    是否记住：<input type="radio" value="on" name="ifRemember">
                                 </td>
-                                <td><input id=submit tabIndex=5 onclick="return checkform()" value="登陆" border=0 type="submit"  name=submit></td>
+                                <td><input id=submit tabIndex=5 onclick="return checkform()" value="登陆" border=0
+                                           type="submit" name=submit></td>
                                 <td></td>
-                                <td width="10%"></td></tr></tbody></table></td></tr>
+                                <td width="10%"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </td>
+                </tr>
                 <tr>
-                    <td width=401>　</td></tr></tbody></table>
+                    <td width=401>　</td>
+                </tr>
+                </tbody>
+            </table>
             <p style="LINE-HEIGHT: 250%; MARGIN-TOP: 0px; MARGIN-BOTTOM: 0px"><font
-                    style="FONT-SIZE: 9pt">sw-project</font></p></div></form></div>
+                    style="FONT-SIZE: 9pt">sw-project</font></p></div>
+    </form>
+</div>
 <script language=javascript>
 
     function checkform() {
-        if(loginform.username.value == '') {
+        if (loginform.username.value == '') {
             sw.Msg.warn("请输入用户名");
             loginform.username.focus();
             return false;
         }
-        if(loginform.pwd.value == '') {
+        if (loginform.pwd.value == '') {
             sw.Msg.warn("请输入登陆密码");
             loginform.pwd.focus();
             return false;

@@ -12,7 +12,7 @@ Ext.ns("Ext.ux");
  * long as the user keeps filling them. Leaving the final one blank ends the repeating series.</p>
  * <p>Usage:</p>
  * <pre><code>
-    {
+ {
         xtype: 'combo',
         plugins: [ Ext.ux.FieldReplicator ],
         triggerAction: 'all',
@@ -22,7 +22,7 @@ Ext.ns("Ext.ux");
  * </code></pre>
  */
 Ext.ux.FieldReplicator = {
-    init: function(f) {
+    init: function (f) {
         f.replicator = this;
         f.enableKeyEvents = true;
         f.on('change', this.onChange, this);
@@ -31,7 +31,7 @@ Ext.ux.FieldReplicator = {
 
 //  If tabbing out and the change event will be fired, flag that
 //  the change handler must focus the correct sibling Field.
-    onKeyDown: function(e) {
+    onKeyDown: function (e) {
         if ((e.getKey() == Ext.EventObject.TAB) && (String(this.startValue) !== String(this.getValue()))) {
             if (e.shiftKey) {
                 this.focusPrev = true;
@@ -42,10 +42,10 @@ Ext.ux.FieldReplicator = {
     },
 
 //  Handle the field either being changed to blank or from blank.
-    onChange: function(f, n, o) {
+    onChange: function (f, n, o) {
 
 //		Ensure that "change" is only fired once.
-    	f.startValue = n;
+        f.startValue = n;
 
         var c = f.ownerCt, l,
             ps = f.previousSibling(),
@@ -54,7 +54,7 @@ Ext.ux.FieldReplicator = {
             if (!Ext.isEmpty(o)) {
 //              The Field has been blanked, and it is not the only one left, remove it
                 if ((ps && (ps.replicator === this)) || (ns && (ns.replicator === this))) {
-                    l = f.findParentBy(function(p) {
+                    l = f.findParentBy(function (p) {
                         return !Ext.isDefined(p.ownerCt);
                     });
                     c.remove(f);
@@ -67,7 +67,7 @@ Ext.ux.FieldReplicator = {
                 ns = new f.constructor(f.cloneConfig());
                 c.insert(c.items.indexOf(f) + 1, ns);
                 c.doLayout();
-                l = f.findParentBy(function(p) {
+                l = f.findParentBy(function (p) {
                     return !Ext.isDefined(p.ownerCt);
                 });
                 l.doLayout();
@@ -76,7 +76,7 @@ Ext.ux.FieldReplicator = {
         if (f.focusPrev) {
             delete f.focusPrev;
             ps.focus(false, true);
-        } else  if (f.focusNext) {
+        } else if (f.focusNext) {
             delete f.focusNext;
             ns.focus(false, true);
         }

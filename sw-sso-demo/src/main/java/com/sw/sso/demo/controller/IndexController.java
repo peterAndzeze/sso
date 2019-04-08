@@ -20,11 +20,13 @@ public class IndexController {
     static {
         System.out.println("demo controller init************************ ");
     }
+
     @RequestMapping("/")
-    public String index(Model model, HttpServletRequest request){
+    public String index(Model model, HttpServletRequest request) {
         System.out.println("我是第一个方法进来了吗");
-        SsoUserInfo ssoUserInfo= (SsoUserInfo) request.getAttribute(SsoConf.SSO_USER);
-        model.addAttribute("ssoUserInfo",ssoUserInfo);
+        SsoUserInfo ssoUserInfo = (SsoUserInfo) request.getAttribute(SsoConf.SSO_USER);
+        model.addAttribute("ssoUserInfo", ssoUserInfo);
         return "index";
     }
+
 }
