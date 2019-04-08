@@ -30,85 +30,88 @@ public class WebController {
     static {
         System.out.println("我初始化了＆＆＆＆＆＆＆＆＆＆＆＆＆＆＆＆＆＆＆＆＆＆＆");
     }
+
     @Autowired
     private UserService userService;
 
     /**
      * 首页登录
+     *
      * @param request
      * @param response
      * @return
      */
     @RequestMapping("/")
-    public String index(Model model,HttpServletRequest request, HttpServletResponse response){
-        SsoUserInfo ssoUserInfo= SsoLoginHelper.loginCheck(request,response);
-        if(null==ssoUserInfo){
+    public String index(Model model, HttpServletRequest request, HttpServletResponse response) {
+        SsoUserInfo ssoUserInfo = SsoLoginHelper.loginCheck(request, response);
+        if (null == ssoUserInfo) {
             return "redirect:login";
         }
-        model.addAttribute("ssoUser",ssoUserInfo);
+        model.addAttribute("ssoUser", ssoUserInfo);
         return "index";
     }
 
     @RequestMapping(SsoConf.SSO_LOGIN)
-    public String login(Model model,HttpServletRequest request,HttpServletResponse response){
-        SsoUserInfo ssoUserInfo=SsoLoginHelper.loginCheck(request,response);
-        if(null!=ssoUserInfo){
-            String redirectUrl=request.getParameter(SsoConf.REDIRECT_URL);
-            if(null!=redirectUrl && redirectUrl.trim().length()>0){
-                if(redirectUrl.endsWith("/")){
-                    redirectUrl=redirectUrl.substring(0,redirectUrl.length()-1);
+    public String login(Model model, HttpServletRequest request, HttpServletResponse response) {
+        SsoUserInfo ssoUserInfo = SsoLoginHelper.loginCheck(request, response);
+        if (null != ssoUserInfo) {
+            String redirectUrl = request.getParameter(SsoConf.REDIRECT_URL);
+            if (null != redirectUrl && redirectUrl.trim().length() > 0) {
+                if (redirectUrl.endsWith("/")) {
+                    redirectUrl = redirectUrl.substring(0, redirectUrl.length() - 1);
                 }
-                String sessionId=SsoLoginHelper.getSessionIdByCookie(request);
-                String redirectUrlFinal=redirectUrl+"?"+SsoConf.SSO_SESSIONID+"="+sessionId;
-                return "redirect:"+redirectUrlFinal;
-            }else{
+                String sessionId = SsoLoginHelper.getSessionIdByCookie(request);
+                String redirectUrlFinal = redirectUrl + "?" + SsoConf.SSO_SESSIONID + "=" + sessionId;
+                return "redirect:" + redirectUrlFinal;
+            } else {
                 return "redirect:/";
             }
         }
-        model.addAttribute("errorMsg",request.getParameter("errorMsg"));
-        model.addAttribute(SsoConf.REDIRECT_URL,request.getParameter(SsoConf.REDIRECT_URL));
+        model.addAttribute("errorMsg", request.getParameter("errorMsg"));
+        model.addAttribute(SsoConf.REDIRECT_URL, request.getParameter(SsoConf.REDIRECT_URL));
         return "login";
     }
 
     @RequestMapping("/doLogin")
     public String doLogin(HttpServletRequest request, HttpServletResponse response,
-                          RedirectAttributes redirectAttributes, UserModel userModel, String ifRemember){
-        boolean ifRem=(ifRemember!=null && "on".equals(ifRemember))?true:false;
-        ReturnMsgUtil<UserModel> infoReturnMsgUtil=userService.findUser(userModel.getUserName(),userModel.getUserPassWord());
-        if(infoReturnMsgUtil.getCode()!=ReturnMsgUtil.SUCCESS_CODE){
-            redirectAttributes.addAttribute("errorMsg",infoReturnMsgUtil.getMsg());
-            redirectAttributes.addAttribute(SsoConf.REDIRECT_URL,request.getParameter(SsoConf.REDIRECT_URL));
+                          RedirectAttributes redirectAttributes, UserModel userModel, String ifRemember) {
+        boolean ifRem = (ifRemember != null && "on".equals(ifRemember)) ? true : false;
+        ReturnMsgUtil<UserModel> infoReturnMsgUtil = userService.findUser(userModel.getUserName(), userModel.getUserPassWord());
+        if (infoReturnMsgUtil.getCode() != ReturnMsgUtil.SUCCESS_CODE) {
+            redirectAttributes.addAttribute("errorMsg", infoReturnMsgUtil.getMsg());
+            redirectAttributes.addAttribute(SsoConf.REDIRECT_URL, request.getParameter(SsoConf.REDIRECT_URL));
             return "redirect:/login";
         }
-        SsoUserInfo ssoUserInfo=new SsoUserInfo();
+        SsoUserInfo ssoUserInfo = new SsoUserInfo();
         ssoUserInfo.setUserId(String.valueOf(infoReturnMsgUtil.getData().getId()));
         ssoUserInfo.setUserName(infoReturnMsgUtil.getData().getUserName());
-        ssoUserInfo.setVersion(UUID.randomUUID().toString().replace("-",""));
+        ssoUserInfo.setVersion(UUID.randomUUID().toString().replace("-", ""));
         ssoUserInfo.setExpireMinite(SsoLoginStore.getRedisExpireMinite());
         ssoUserInfo.setExpireFreshTime(System.currentTimeMillis());
-        String sessionId= SsoSessionIdHelper.makeSessionId(ssoUserInfo);
-        SsoLoginHelper.login(response,sessionId,ssoUserInfo,ifRem);
-        String redirectUrl=request.getParameter(SsoConf.REDIRECT_URL);
-        if(null!=redirectUrl && redirectUrl.trim().length()>0){
-            if(redirectUrl.endsWith("/")){
-                redirectUrl=redirectUrl.substring(0,redirectUrl.length()-1);
+        String sessionId = SsoSessionIdHelper.makeSessionId(ssoUserInfo);
+        SsoLoginHelper.login(response, sessionId, ssoUserInfo, ifRem);
+        String redirectUrl = request.getParameter(SsoConf.REDIRECT_URL);
+        if (null != redirectUrl && redirectUrl.trim().length() > 0) {
+            if (redirectUrl.endsWith("/")) {
+                redirectUrl = redirectUrl.substring(0, redirectUrl.length() - 1);
             }
-            redirectAttributes.addAttribute(SsoConf.SSO_SESSIONID,sessionId);
-            System.out.println("************"+redirectUrl);
-            return  "redirect:"+redirectUrl;
-        }else{
+            redirectAttributes.addAttribute(SsoConf.SSO_SESSIONID, sessionId);
+            System.out.println("************" + redirectUrl);
+            return "redirect:" + redirectUrl;
+        } else {
             return "redirect:/";
         }
     }
 
     /**
      * 退出
+     *
      * @return
      */
     @RequestMapping(SsoConf.SSO_LOGINOUT)
-    public String loginout(HttpServletRequest request,HttpServletResponse response,RedirectAttributes redirectAttributes){
-        SsoLoginHelper.loginout(request,response);
-        redirectAttributes.addAttribute(SsoConf.REDIRECT_URL,request.getParameter(SsoConf.REDIRECT_URL));
+    public String loginout(HttpServletRequest request, HttpServletResponse response, RedirectAttributes redirectAttributes) {
+        SsoLoginHelper.loginout(request, response);
+        redirectAttributes.addAttribute(SsoConf.REDIRECT_URL, request.getParameter(SsoConf.REDIRECT_URL));
         return "redirect:/login";
     }
 

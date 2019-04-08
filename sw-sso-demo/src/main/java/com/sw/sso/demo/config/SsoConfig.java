@@ -30,11 +30,9 @@ public class SsoConfig {
     private String ssoExcludedPaths;
 
 
-
-
     @Bean
-    public RedisTemplate<String,String> redisTemplate(RedisConnectionFactory redisConnectionFactory){
-        RedisTemplate<String,String> redisTemplate=new RedisTemplate<>();
+    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(redisConnectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());
         redisTemplate.setValueSerializer(new StringRedisSerializer());
@@ -46,21 +44,21 @@ public class SsoConfig {
 
     /**
      * 注册拦截器
+     *
      * @return
      */
     @Bean
-    public FilterRegistrationBean ssoFilterRegistration(){
-        FilterRegistrationBean filterRegistrationBean=new FilterRegistrationBean();
+    public FilterRegistrationBean ssoFilterRegistration() {
+        FilterRegistrationBean filterRegistrationBean = new FilterRegistrationBean();
         filterRegistrationBean.setName("ssoFilter");
         filterRegistrationBean.setOrder(1);
         filterRegistrationBean.addUrlPatterns("/*");
         filterRegistrationBean.setFilter(new SsoTokenFilter());
-        filterRegistrationBean.addInitParameter(SsoConf.SSO_SERVER,ssoServer);
-        filterRegistrationBean.addInitParameter(SsoConf.SSO_LOGINOUT_PATH,ssoLoginOutPath);
-        filterRegistrationBean.addInitParameter(SsoConf.SSO_EXCLUDED_PATHS,ssoExcludedPaths);
+        filterRegistrationBean.addInitParameter(SsoConf.SSO_SERVER, ssoServer);
+        filterRegistrationBean.addInitParameter(SsoConf.SSO_LOGINOUT_PATH, ssoLoginOutPath);
+        filterRegistrationBean.addInitParameter(SsoConf.SSO_EXCLUDED_PATHS, ssoExcludedPaths);
         return filterRegistrationBean;
     }
-
 
 
 }

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author sw
  * @Title: SsoTokenLoginHelper
  * @ProjectName sso
- * @Description: 
+ * @Description:
  * @date 19-1-14 上午10:40
  */
 public class SsoTokenLoginHelper {
@@ -48,6 +48,7 @@ public class SsoTokenLoginHelper {
 
         SsoLoginStore.remove(storeKey);
     }
+
     /**
      * client logout
      *
@@ -65,7 +66,7 @@ public class SsoTokenLoginHelper {
      * @param sessionId
      * @return
      */
-    public static SsoUserInfo loginCheck(String  sessionId){
+    public static SsoUserInfo loginCheck(String sessionId) {
 
         String storeKey = SsoSessionIdHelper.pareseStoreKey(sessionId);
         if (storeKey == null) {
@@ -78,7 +79,7 @@ public class SsoTokenLoginHelper {
             if (ssoUserInfo.getVersion().equals(version)) {
 
                 // After the expiration time has passed half, Auto refresh
-                if ((System.currentTimeMillis() - ssoUserInfo.getExpireFreshTime()) > ssoUserInfo.getExpireMinite()/2) {
+                if ((System.currentTimeMillis() - ssoUserInfo.getExpireFreshTime()) > ssoUserInfo.getExpireMinite() / 2) {
                     ssoUserInfo.setExpireFreshTime(System.currentTimeMillis());
                     SsoLoginStore.put(storeKey, ssoUserInfo);
                 }
@@ -89,8 +90,13 @@ public class SsoTokenLoginHelper {
         return null;
     }
 
-
-    public static SsoUserInfo loginCheck(HttpServletRequest request, HttpServletResponse response){
+    /**
+     * 检查用户是否已经登录过
+     * @param request
+     * @param response
+     * @return
+     */
+    public static SsoUserInfo loginCheck(HttpServletRequest request, HttpServletResponse response) {
 
         String cookieSessionId = CookieUtil.getValue(request, SsoConf.SSO_SESSIONID);
 
@@ -104,7 +110,6 @@ public class SsoTokenLoginHelper {
 
         // remove old cookie
         SsoTokenLoginHelper.removeSessionIdByCookie(request, response);
-
         // set new cookie
         String paramSessionId = request.getParameter(SsoConf.SSO_SESSIONID);
         ssoUserInfo = SsoTokenLoginHelper.loginCheck(paramSessionId);
@@ -112,7 +117,6 @@ public class SsoTokenLoginHelper {
             CookieUtil.set(response, SsoConf.SSO_SESSIONID, paramSessionId, false);    // expire when browser close （client cookie）
             return ssoUserInfo;
         }
-
         return null;
     }
 

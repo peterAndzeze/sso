@@ -13,30 +13,32 @@ public class SpringContextUtil implements ApplicationContextAware {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
 
-        SpringContextUtil.applicationContext=applicationContext;
+        SpringContextUtil.applicationContext = applicationContext;
     }
 
-    public static ApplicationContext getApplicationContext(){
+    public static ApplicationContext getApplicationContext() {
         return applicationContext;
     }
 
     /**
      * 获取
+     *
      * @param t
      * @param <T>
      * @return
      */
-    public static <T> T getBeanByClass(Class<T> t){
+    public static <T> T getBeanByClass(Class<T> t) {
         return applicationContext.getBean(t);
     }
 
     /**
      * 根据名字
+     *
      * @param beanName
      * @param <T>
      * @return
      */
-    public static <T> T getBeanByNames(String beanName){
+    public static <T> T getBeanByNames(String beanName) {
         return (T) applicationContext.getBean(beanName);
     }
 }

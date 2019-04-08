@@ -14,7 +14,6 @@ import java.util.StringTokenizer;
  */
 public class StringUtils {
     /**
-     *
      * @param str
      * @return
      */
@@ -23,7 +22,6 @@ public class StringUtils {
     }
 
     /**
-     *
      * @param str
      * @return
      */
@@ -42,7 +40,6 @@ public class StringUtils {
     }
 
     /**
-     *
      * @param str
      * @param delimiters
      * @param trimTokens
@@ -71,7 +68,6 @@ public class StringUtils {
     }
 
     /**
-     *
      * @param collection
      * @return
      */

@@ -15,14 +15,15 @@ import org.springframework.data.redis.core.RedisTemplate;
 public class RedisServerTest extends SwSsoServerApplicationTests {
     @Autowired
     RedisTemplate redisTemplate;
+
     @Test
-    public void getName(){
+    public void getName() {
         System.out.println(redisTemplate);
-        Object value=redisTemplate.opsForValue().get("name");
-        System.out.println("取值"+value);
-        redisTemplate.opsForValue().set("name","张三");
-        Object value1=redisTemplate.opsForValue().get("name");
-        System.out.println("取值"+value1);
+        Object value = redisTemplate.opsForValue().get("name");
+        System.out.println("取值" + value);
+        redisTemplate.opsForValue().set("name", "张三");
+        Object value1 = redisTemplate.opsForValue().get("name");
+        System.out.println("取值" + value1);
 
     }
 }

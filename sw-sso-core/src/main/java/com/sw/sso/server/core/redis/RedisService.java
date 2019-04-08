@@ -18,6 +18,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisService {
     @Autowired
     private RedisTemplate redisTemplate;
+
     static {
         System.out.println("我初始化了吗×××××××××××××××××××××××××××");
     }
@@ -33,33 +34,27 @@ public class RedisService {
     }
 
     /**
-     *
      * @param key
      * @param value
      * @param expire
      * @param timeUnit 存放时间
      */
-    public void putValue(String key,Object value,int expire,TimeUnit timeUnit){
-       redisTemplate.opsForValue().set(key,value,expire,timeUnit);
+    public void putValue(String key, Object value, int expire, TimeUnit timeUnit) {
+        redisTemplate.opsForValue().set(key, value, expire, timeUnit);
     }
 
     /**
      * 取
+     *
      * @param key
      */
-    public Object getValue(String key){
+    public Object getValue(String key) {
         return redisTemplate.opsForValue().get(key);
     }
 
-    public void remove(String key){
+    public void remove(String key) {
         redisTemplate.delete(key);
     }
-
-
-
-
-
-
 
 
 }

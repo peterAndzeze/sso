@@ -9,6 +9,7 @@ import com.sw.sso.server.core.vo.ReturnMsgUtil;
 public interface UserService {
     /**
      * 查找用户
+     *
      * @param userName
      * @param userPassWord
      * @return
